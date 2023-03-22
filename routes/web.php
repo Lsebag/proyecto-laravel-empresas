@@ -30,4 +30,4 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::view('login','carpeta-login.login');
+Route::view('main','empresa.main');

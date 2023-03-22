@@ -67,3 +67,31 @@ Abro el servidor
 ```shell
     php artisan serve &
 ```
+
+# Clonar el proyecto y levantarlo
+Clono el proyecto
+```shell
+    git clone https://...
+    cd laravel_empresas
+    composer update
+    npm install
+```
+
+* Verifico que tenga el fichero .env, si no lo consigo y genero la clave
+```shell
+    php artisan key:gen
+```
+
+* Cargo las bases de datos
+```shell
+#Al estar funcionando con docker, lo levanto. El fichero se aporta con el proyecto
+    docker compose up -d
+    php artisan migrate
+```
+* Levanto el proyecto y verifico su funcionamiento (el & es para no perder el terminal y ejecutar el proceso en background)
+```shell
+    php artisan serve &
+    npm run dev
+```
+
+## [Diseño_de pantallas](./documentacion/diseño_layout.md)

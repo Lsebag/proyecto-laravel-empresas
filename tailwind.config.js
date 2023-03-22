@@ -13,6 +13,17 @@ module.exports = {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            height:{
+                "10vh":"10vh",
+                "15vh":"15vh",
+                "65vh":"65vh",
+            },
+            colors:{
+                "header": "#E6621F",
+                "nav": "#EDEDEE",
+                "main": "#FFFFFF",
+                "footer": "#898989"
+            },
         },
     },
 
