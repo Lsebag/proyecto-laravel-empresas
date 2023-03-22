@@ -11,9 +11,13 @@
 </head>
 
 <body>
-<header class="h-15vh bg-header">
-    <h1>cabecera fijo img+titulo+logueo</h1>
-</header>
+{{--Las siguientes 3 líneas son las que le dan contenido a $slot--}}
+{{--<x-layout.header>--}}
+{{--    Hola--}}
+{{--</x-layout.header>--}}
+
+<x-layout.header />
+
 <nav  class="h-10vh bg-nav">
     @yield("menu")
 </nav>
