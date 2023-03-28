@@ -22,6 +22,6 @@
 Route::view('main','main');
 ```
 
-- Creo la página [main.blade.php](../resources/views/empresa/main.blade.php) que extienda de layout
+- Creo la página [main.blade.php](../resources/views/main.blade.php) que extienda de layout
 2. Lo probamos http://localhost:8000/main
 

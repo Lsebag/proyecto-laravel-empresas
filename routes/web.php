@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\EmpresaController;
+use \App\Http\Controllers\ProductoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,9 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::view('main','empresa.main');
+Route::view('main','main');
 
 Route::resource("empresas",EmpresaController::class);
+// Aquí mismo estoy definiendo cuál es el nombre de mi recurso
+Route::resource("products",ProductoController::class);
+

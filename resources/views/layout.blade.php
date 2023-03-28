@@ -19,7 +19,8 @@
 <x-layout.header />
 
 <nav  class="h-10vh bg-nav">
-    @yield("menu")
+    <x-anchor>EMPRESAS</x-anchor>
+    <x-anchor href="{{route('products.index')}}">PRODUCTOS</x-anchor>
 </nav>
 <main  class="h-65vh bg-main">
     @yield("main")
