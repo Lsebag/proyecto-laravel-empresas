@@ -10,7 +10,7 @@ services:
     environment:
       - MYSQL_USER=sebas
       - MYSQL_PASSWORD=sebas
-      - MYSQL_DATABASE=empresa
+      - MYSQL_DATABASE=empresas
       - MYSQL_ROOT_PASSWORD=root
   phpmyadmin:
     image: phpmyadmin

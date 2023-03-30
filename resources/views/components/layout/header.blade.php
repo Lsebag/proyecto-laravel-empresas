@@ -33,8 +33,8 @@
                         {{--        <input type="password" name="password" id="password" placeholder="password">--}}
 
                         <x-primary-button class="mx-3 w-1/4 my-2">Login</x-primary-button>
-                        <x-anchor-register class="mx-3 w-1/4 my-2" href="{{route('register')}}">Registrarse
-                        </x-anchor-register>
+                        <x-anchor class="mx-3 w-1/4 my-2" href="{{route('register')}}">Registrarse
+                        </x-anchor>
 
                         {{--            <button type="submit" value="login">Login</button>--}}
                         {{--            <button type="submit" value="register">Register</button>--}}

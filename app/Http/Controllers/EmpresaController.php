@@ -14,9 +14,9 @@ class EmpresaController extends Controller
     public function index()
     {
         //
-//        $empresas=Empresa::ALL();
-        $empresas=Empresa::paginate();
-        return view("empresa.listado",['empresas'=>$empresas]);
+        $empresas=Empresa::ALL();
+        $empresas=Empresa::paginate(10);
+        return view("empresas.listado",['empresas'=>$empresas]);
     }
 
     /**
@@ -24,7 +24,8 @@ class EmpresaController extends Controller
      */
     public function create()
     {
-        //
+        //TODO Crear la página html create.blade.php (vistas) un formulario para rellenar
+    return view("empresas.create");
     }
 
     /**
@@ -33,6 +34,14 @@ class EmpresaController extends Controller
     public function store(StoreEmpresaRequest $request)
     {
         //
+        $valores = $request->input();
+        $empresa = new Empresa($valores);
+        $empresa->saveOrFail();
+
+        $empresas=Empresa::all();
+//        return view("empresas.listado",['empresas'=>$empresas]);
+        return redirect(route("empresas.index"));
+
     }
 
     /**
@@ -41,29 +50,46 @@ class EmpresaController extends Controller
     public function show(Empresa $empresa)
     {
         //
+        return view("empresas.edit",['empresa'=>$empresa]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Empresa $empresa)
+    public function edit(int $empresa)
     {
-        //
+        //TODO pendiente de hacer el html editar.blade.php para visualizar en un formulario los datos de esta empresa
+        $empresa = Empresa::find($empresa);
+        return view("empresas.edit",['empresa'=>$empresa]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEmpresaRequest $request, Empresa $empresa)
+    public function update(UpdateEmpresaRequest $request, int $empresa)
     {
         //
+        $empresa=Empresa::find($empresa);
+        $valores = $request->input();
+        $empresa->update($valores);
+
+//        $todas_empresas = Empresa::all();
+//        return view("empresas.listado",['empresas'=>$todas_empresas]);
+        return redirect(route("empresas.index"));
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Empresa $empresa)
+    public function destroy(int $empresa)
     {
+        $empresa = Empresa::find($empresa);
+        $empresa->deleteOrFail();
+        $todas_empresas = Empresa::all();
+//        return view("empresas.listado",['empresas'=>$todas_empresas]);
+        return redirect(route("empresas.index"));
+
         //
     }
 }

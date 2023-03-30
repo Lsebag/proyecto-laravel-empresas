@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string("nombre");
             $table->string("direccion");
+            $table->string("DNI");
 //            $table->string("telefono");
 //            $table->string("CIF");
 //            $table->string("contacto");

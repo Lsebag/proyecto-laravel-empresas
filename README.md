@@ -46,7 +46,7 @@ Al usar este comando seleccionamos la opción "Blade"
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
     DB_PORT=23307
-    DB_DATABASE=empresa
+    DB_DATABASE=empresas
     DB_USERNAME=sebas
     DB_PASSWORD=sebas
 ```
