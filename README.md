@@ -95,3 +95,122 @@ Clono el proyecto
 ```
 
 ## [Diseño_de pantallas](./documentacion/diseño_layout.md)
+
+## Instalaremos Vue
+-  Instalar Vue
+```bash
+ npm install vue@next --save-dev
+```
+
+-  Instalamos el plugin de vue para vite
+```bash
+  npm install @vitejs/plugin-vue
+```
+
+- Vamos a resources->js->[app.js](./resources/js/app.js)
+- y debemos importar Vue, escribimos en el fichero lo siguiente:
+
+```bash
+    import {createApp} from "vue/dist/vue.esm-bundler";
+```
+
+- Especificamos en qué sección del HTML va a estar disponible y se monta especificando el id.
+```bash
+  .mount("#app");
+ ```
+
+- Creamos el fichero saludo.vue dentro de resources->js->componentes
+
+- En app.js importamos el componente saludo.
+```bash
+  import saludo from "./componentes/saludo.vue";
+  
+  createApp({
+    components:{
+        saludo
+        }
+    }
+
+).mount("#app");
+  ```
+
+- En [vite.config.js](vite.config.js) importamos vue
+```bash
+  import vue from '@vitejs/plugin-vue';
+  ```
+
+- Y luego establecemos en vite.config.js que utilizaremos vue
+```bash
+export default defineConfig({
+    plugins: [
+        vue(),
+        laravel({
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.js',
+            ],
+            refresh: true,
+        }),
+    ],
+});
+```
+
+- Agrego en mi vista lo siguiente:
+```html
+    <head>
+        @vite(["resources/js/app.js","resources/css/app.css"])
+    </head>
+    <body>
+        <div id="app">
+            <saludo nombre="Pedro"></saludo>
+        </div>
+    <body>
+```
+
+- En mi componente vue pongo lo siguiente:
+```bash
+    <template>
+    <h1>Hola desde un componente vue</h1>
+        Valor recibido {{nombre}}<hr>
+        Valor generado {{valor1}}<hr>
+        <button @click="dime_algo">Click me</button>
+    </template>
+```
+
+-Puedo retornar valores
+```bash
+    data(){
+        return{
+            valor1: 'Hola desde vue'
+        }
+    },
+```
+
+- En mi componente vue puedo definir métodos
+```bash
+    methods:{
+        dime_algo:function (){
+            return alert("Valor de valor es "+this.valor1);
+            }
+    }
+```
+
+- Al final mi componente queda así:
+```bash
+export default {
+    name: "saludo",
+    props:['nombre'],
+    data(){
+        return{
+            valor1: 'Hola desde vue'
+        }
+    },
+    methods:{
+        dime_algo:function (){
+            return alert("Valor de valor es "+this.valor1);
+            }
+    }
+}
+```
+
+

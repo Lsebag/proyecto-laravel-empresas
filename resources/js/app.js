@@ -1,7 +1,12 @@
-import './bootstrap';
+import {createApp} from "vue/dist/vue.esm-bundler";
+import saludo from "./componentes/saludo.vue";
+import cronometro from "./componentes/cronometro.vue";
 
-import Alpine from 'alpinejs';
+createApp({
+    components:{
+        saludo,
+        cronometro
+        }
+    }
 
-window.Alpine = Alpine;
-
-Alpine.start();
+).mount("#app");
