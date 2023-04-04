@@ -96,7 +96,179 @@ Clono el proyecto
 
 ## [Diseño_de pantallas](./documentacion/diseño_layout.md)
 
+
+## Modelo alumnos
+- Ahora creamos el modelo alumnos, el cual tendrá nombre, teléfono, email, un atributo multivaluado de idiomas y una clave foránea de empresas.
+
+```bash
+    php artisan make:model Alumno --all
+```
+
+- También creamos el modelo Idioma porque al ser un atributo multivaluado necesitamos una nueva tabla
+```bash
+    php artisan make:model Idioma --all
+```
+
+- En el archivo [create_alumnos_table.php](./database/migrations/2023_04_04_065957_create_alumnos_table.php) escribo lo siguiente para crear la tabla:
+
+```bash
+        Schema::create('alumnos', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('nombre');
+            $table->string('telefono');
+            $table->string('email');
+            $table->foreignId('empresa_id')->constrained();
+            
+        });
+    }
+```
+
+- En el archivo [create_idiomas_table.php](./database/migrations/2023_04_04_071709_create_idiomas_table.php) escribo lo siguiente:
+
+```bash
+    public function up(): void
+    {
+        Schema::create('idiomas', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId("alumno_id")->constrained();
+            $table->string('idioma');
+            $table->timestamps();
+
+        });
+    }
+```
+
+- En [AlumnoFactory.php](./database/factories/AlumnoFactory.php) pongo lo siguiente para poblar la tabla
+
+```bash
+    use App\Models\Empresa;
+    use Illuminate\Support\Arr;
+    
+    public function definition(): array
+    {
+        // Con el siguiente código recibo un id de una empresa aleatoria
+        $empresas=Empresa::all('id');
+
+        //Convierto la colección a un array
+        $empresas=$empresas->toArray();
+        $empresa_id=Arr::random($empresas)['id'];
+
+        return [
+            'nombre'=>fake()->name(),
+            'telefono'=>fake()->phoneNumber(),
+            'email'=>fake()->email(),
+            'empresa_id'=>$empresa_id
+            //
+        ];
+    }
+}
+```
+
+- En [AlumnoSeeder.php](./database/seeders/AlumnoSeeder.php) lo siguiente:
+
+```bash
+    public function run(): void
+    {
+        // Aquí recojo a cada alumno y determino qué se hará con él, en este caso queremos que se le asigne 1,2 o 3 idiomas para cada alumno
+        Alumno::factory()->count(50)->create()
+            ->each(function ($alumno){
+               $idiomas=['Inglés','Francés','Alemán','Ruso','Italiano','Portugés'];
+               $num_idiomas=rand(0,5);
+               if ($num_idiomas!=0){
+               $idiomas_hablados=Arr::random($idiomas,$num_idiomas);
+               foreach ($idiomas_hablados as $idioma_tupla){
+                   $idioma=new Idioma();
+                   $idioma->alumno_id=$alumno->id;
+                   $alumno->idioma=$idioma_tupla;
+                   $idioma->save();
+               }
+               }
+            });
+
+    }
+```
+
+- En el [AlumnoController.php](./app/Http/Controllers/AlumnoController.php) ponemos:
+
+```bash
+    public function index()
+    {
+        //
+//        $alumnos=Alumno::all();
+        $alumnos=Alumno::paginate(15);
+        return view("alumnos.listado_alumnos",['alumnos'=>$alumnos]);
+    }
+```
+
+- Establecemos la ruta en [web.php](routes/web.php)
+```bash
+use \App\Http\Controllers\AlumnoController;
+
+Route::resource("alumnos",AlumnoController::class);
+```
+
+- Creo el fichero "listado_alumnos.blade.php" dentro de la carpeta alumnos dentro de la carpeta views [listado_alumnos.blade.php](./resources/views/alumnos)
+```bash
+@extends('layout')
+@section('main')
+    <table>
+        <caption>Listado de alumnos</caption>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Telefono</th>
+
+        </tr>
+        @foreach($alumnos as $alumno)
+            <tr>
+                @csrf
+
+                {{--                <td>{{$empresa->id}}</td>--}}
+                <td>{{$alumno->id}}</td>
+                <td>{{$alumno->nombre}}</td>
+                <td>{{$alumno->email}}</td>
+                <td>{{$alumno->telefono}}</td>
+
+            </tr>
+        @endforeach
+
+    </table>
+{{$alumnos->links()}}
+@endsection
+```
+
+- Realizo las migraciones y pueblo las tablas:
+```bash
+php artisan migrante --seed
+```
+
+- En [StoreAlumnoRequest.php](./app/Http/Requests/StoreAlumnoRequest.php) y en [UpdateAlumnoRequest.php](./app/Http/Requests/UpdateAlumnoRequest.php) ponemos los valores a true
+```bash
+    public function authorize(): bool
+    {
+        return true;
+    }
+```
+
+- En [DatabaseSeeder](./database/seeders/DatabaseSeeder.php) ponemos:
+```bash
+        $this->call([
+            EmpresaSeeder::class,
+            AlumnoSeeder::class
+        ]);
+```
+
+- Luego hacemos
+```bash
+php artisan migrate:fresh --seed
+```
+
+
 ## Instalaremos Vue
+El link del profesor a esto es: https://es.wikieducator.org/Usuario:ManuelRomero/Vue
+
 -  Instalar Vue
 ```bash
  npm install vue@next --save-dev
@@ -107,39 +279,14 @@ Clono el proyecto
   npm install @vitejs/plugin-vue
 ```
 
-- Vamos a resources->js->[app.js](./resources/js/app.js)
-- y debemos importar Vue, escribimos en el fichero lo siguiente:
+- Vamos a [vite.config.js](vite.config.js), importamos vue
 
 ```bash
-    import {createApp} from "vue/dist/vue.esm-bundler";
+import vue from '@vitejs/plugin-vue';
 ```
 
-- Especificamos en qué sección del HTML va a estar disponible y se monta especificando el id.
-```bash
-  .mount("#app");
- ```
+- Y luego establecemos en vite.config.js que utilizaremos el plugin "vue"
 
-- Creamos el fichero saludo.vue dentro de resources->js->componentes
-
-- En app.js importamos el componente saludo.
-```bash
-  import saludo from "./componentes/saludo.vue";
-  
-  createApp({
-    components:{
-        saludo
-        }
-    }
-
-).mount("#app");
-  ```
-
-- En [vite.config.js](vite.config.js) importamos vue
-```bash
-  import vue from '@vitejs/plugin-vue';
-  ```
-
-- Y luego establecemos en vite.config.js que utilizaremos vue
 ```bash
 export default defineConfig({
     plugins: [
@@ -155,6 +302,24 @@ export default defineConfig({
 });
 ```
 
+- Vamos a [app.js](./resources/js/app.js) y debemos importar Vue, escribimos en el fichero lo siguiente:
+
+```bash
+    import {createApp} from "vue/dist/vue.esm-bundler";
+```
+
+- Especificamos en qué sección del HTML va a estar disponible y se monta especificando el id: '.mount("#app")'
+```bash
+createApp({
+    components:{
+        saludo,
+        cronometro
+        }
+    }
+
+).mount("#app");
+ ```
+
 - Agrego en mi vista lo siguiente:
 ```html
     <head>
@@ -167,14 +332,31 @@ export default defineConfig({
     <body>
 ```
 
-- En mi componente vue pongo lo siguiente:
+- Creamos el fichero saludo.vue dentro de resources->js->componentes
+
+- En app.js importamos el componente saludo.
 ```bash
-    <template>
-    <h1>Hola desde un componente vue</h1>
-        Valor recibido {{nombre}}<hr>
-        Valor generado {{valor1}}<hr>
-        <button @click="dime_algo">Click me</button>
-    </template>
+  import saludo from "./componentes/saludo.vue";
+  
+  createApp({
+    components:{
+        saludo
+        }
+    }
+
+).mount("#app");
+ ```
+
+
+
+- En mi componente vue pongo lo siguiente:
+```html
+<template>
+<h1>Hola desde un componente vue</h1>
+    Valor recibido desde fuera: {{nombre}}<hr>
+    Valor generado dentro del componente: {{nombre_interno}}<hr>
+    <button @click="dime_algo">Click me</button>
+</template>
 ```
 
 -Puedo retornar valores
@@ -198,11 +380,11 @@ export default defineConfig({
 - Al final mi componente queda así:
 ```bash
 export default {
-    name: "saludo",
-    props:['nombre'],
-    data(){
+    name: "saludo", // Nombre del componente
+    props:['nombre'], // En props pongo los atributos que voy a recibir de afuera
+    data(){ // Esta función va a devolver las variables del componente
         return{
-            valor1: 'Hola desde vue'
+            nombre_interno: 'Hola desde vue'
         }
     },
     methods:{

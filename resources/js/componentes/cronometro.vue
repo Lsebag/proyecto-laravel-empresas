@@ -1,6 +1,7 @@
 <template>
-{{minutos}}:{{segundos}}:{{decimas}}
-    <button @click="f_parar_arrancar" >{{parar_arrancar}}</button>
+{{minutos}}:{{segundos}}:{{decimas}}<br>
+<!--    <button @click="f_parar_arrancar" >{{parar_arrancar}}</button>-->
+    <button @click="cambia_estado" >{{parar_arrancar}}</button><br>
     <button @click="resetear" >Resetear</button>
 </template>
 
@@ -12,7 +13,7 @@ export default {
             minutos:0,
             segundos:0,
             decimas:0,
-            parar_arrancar:"Arrancar",
+            parar_arrancar:"Start",
             funcionando:false
         }
     },
@@ -32,21 +33,25 @@ export default {
         },100)
     },
     methods:{
-        f_parar_arrancar :function (){
-            if (this.funcionando===false){
-                this.funcionando=true;
-                this.parar_arrancar="Parar";
-            }else {
-                this.funcionando=false;
-                this.parar_arrancar="Arrancar";
-            }
+        // f_parar_arrancar :function (){
+        cambia_estado :function (){
+            this.funcionando=!this.funcionando;
+            this.parar_arrancar=this.funcionando?"Stop":"Start";
+
+            // if (this.funcionando===false){
+            //     this.funcionando=true;
+            //     this.parar_arrancar="Stop";
+            // }else {
+            //     this.funcionando=false;
+            //     this.parar_arrancar="Start";
+            // }
         },
         resetear:function (){
             this.minutos=0;
             this.segundos=0;
             this.decimas=0;
             this.funcionando=false;
-            this.parar_arrancar="Arrancar"
+            this.parar_arrancar="Start"
         }
     }
 
@@ -55,5 +60,9 @@ export default {
 </script>
 
 <style scoped>
-
+    button{
+        background-color: lightblue;
+        color: black;
+        font-weight: bold;
+    }
 </style>

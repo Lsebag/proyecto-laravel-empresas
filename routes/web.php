@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\EmpresaController;
 use \App\Http\Controllers\ProductoController;
+use \App\Http\Controllers\AlumnoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,9 @@ Route::view('main','main');
 Route::resource("empresas",EmpresaController::class);
 // Aquí mismo estoy definiendo cuál es el nombre de mi recurso
 Route::resource("products",ProductoController::class);
+
+Route::resource("alumnos",AlumnoController::class);
+
+Route::view('aprendiendo_vue','aprendiendo_vue');
+
 

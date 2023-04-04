@@ -14,9 +14,20 @@ class EmpresaController extends Controller
     public function index()
     {
         //
-        $empresas=Empresa::ALL();
-        $empresas=Empresa::paginate(10);
-        return view("empresas.listado",['empresas'=>$empresas]);
+        $empresas=Empresa::all();
+//        $empresas=Empresa::paginate(10);
+
+        // Aquí me devuelve un array con el nombre de los campos
+        $campos=array_keys($empresas[0]->getAttributes());
+
+        // Lo siguiente es para eliminar del array los campos llamados created_at y updated_at
+        unset($campos[array_search('created_at',$campos)]);
+        unset($campos[array_search('updated_at',$campos)]);
+
+//        return view("empresas.listado",['empresas'=>$empresas]);
+
+
+        return view("empresas.listado",['filas'=>$empresas,'campos'=>$campos,'tabla'=>'Empresas']);
     }
 
     /**
