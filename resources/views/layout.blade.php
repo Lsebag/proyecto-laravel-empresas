@@ -18,8 +18,10 @@
 {{--<x-layout.header>--}}
 {{--    Hola--}}
 {{--</x-layout.header>--}}
-
+    
 <x-layout.header />
+
+
 
 <nav  class="h-10vh bg-nav">
     <x-anchor href="{{route('empresas.index')}}">EMPRESAS</x-anchor>
@@ -27,14 +29,10 @@
     <x-anchor href="{{route('alumnos.index')}}">ALUMNOS</x-anchor>
 
 </nav>
+@auth
 
 <div id="app">
     @yield('contenido')
-
-    <h2>Zona de Vue</h2>
-    <saludo nombre="Pedro"></saludo>
-    <h2> Cronometro</h2>
-    <cronometro></cronometro>
 
 </div>
 
@@ -45,8 +43,10 @@
     <h1>footer fijo @copyright contacto y podríamos aportar redes sociales</h1>
 </footer>
 
-
-
+@endauth
+@guest
+ <h2>Inicie sesión para ver el contenido de la página<h2>
+@endguest
 
 </body>
 </html>

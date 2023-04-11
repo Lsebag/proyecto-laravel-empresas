@@ -1,5 +1,5 @@
 @extends('layout')
-@section('main')
+@section('contenido')
 
     <form action="{{route('empresas.update',$empresa->id)}}" method="post">
         @method('PUT')

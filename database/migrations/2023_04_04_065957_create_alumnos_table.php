@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('telefono');
             $table->string('email');
-            $table->foreignId('empresa_id')->constrained();
+            $table->foreignId('empresa_id')->constrained()->cascadeOnDelete();
 
         });
     }

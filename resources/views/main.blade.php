@@ -2,7 +2,7 @@
 @section('titulo')
     Home page
 @endsection
-@section('menu')
+@section('contenido')
 
 @endsection
 @section("main")

@@ -4,18 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEmpresaRequest;
 use App\Http\Requests\UpdateEmpresaRequest;
+use App\Models\Alumno;
 use App\Models\Empresa;
 
 class EmpresaController extends Controller
 {
+    public function get_paginate(){
+        $empresas=Empresa::paginate(10);
+        return response ($empresas);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //
-        $empresas=Empresa::all();
-//        $empresas=Empresa::paginate(10);
+        // $empresas=Empresa::all();
+        $empresas=Empresa::paginate(10);
 
         // Aquí me devuelve un array con el nombre de los campos
         $campos=array_keys($empresas[0]->getAttributes());
@@ -97,10 +103,17 @@ class EmpresaController extends Controller
     {
         $empresa = Empresa::find($empresa);
         $empresa->deleteOrFail();
-        $todas_empresas = Empresa::all();
-//        return view("empresas.listado",['empresas'=>$todas_empresas]);
-        return redirect(route("empresas.index"));
 
-        //
+        // $todas_empresas = Empresa::all();
+        $todas_empresas=Empresa::paginate(10);
+
+        
+//        return view("empresas.listado",['empresas'=>$todas_empresas]);
+
+
+        // return redirect(route("empresas.index"));
+        return response($todas_empresas);
+
+
     }
 }

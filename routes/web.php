@@ -41,6 +41,8 @@ Route::resource("products",ProductoController::class);
 
 Route::resource("alumnos",AlumnoController::class);
 
+Route::get("empresas/paginate",[EmpresaController::class,"get_paginate"]);
+
 Route::view('aprendiendo_vue','aprendiendo_vue');
 
 
