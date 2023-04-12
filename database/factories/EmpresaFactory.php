@@ -20,7 +20,7 @@ class EmpresaFactory extends Factory
         $letra=chr(($dni % 27)+ord('A'));
         $dni="$dni-$letra";
         return [
-            'nombre'=>fake()->name(),
+            'nombre'=>fake()->company(),
             'direccion'=>fake()->address(),
             'DNI'=>$dni
             //

@@ -28,6 +28,8 @@
 {{--    <x-anchor href="{{route('products.index')}}">PRODUCTOS</x-anchor>--}}
     <x-anchor href="{{route('alumnos.index')}}">ALUMNOS</x-anchor>
 
+    <x-anchor href="{{route('idiomas.index')}}">IDIOMAS</x-anchor>
+
 </nav>
 @auth
 

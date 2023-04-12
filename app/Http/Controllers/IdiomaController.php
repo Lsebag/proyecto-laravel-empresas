@@ -11,9 +11,26 @@ class IdiomaController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function get_paginate(){
+        $idiomas=Idioma::paginate(10);
+        return response ($idiomas);
+    }
+
     public function index()
     {
         //
+        // $idiomas=Idioma::all();
+        $idiomas=Idioma::paginate(10);
+
+        $campos=array_keys($idiomas[0]->getAttributes());
+
+        unset($campos[array_search('created_at',$campos)]);
+        unset($campos[array_search('updated_at',$campos)]);
+        // unset($campos[array_search('alumno_id',$campos)]);
+
+
+        return view("idiomas.listado_idiomas",['filas'=>$idiomas,'campos'=>$campos,'tabla'=>'Idiomas']);
+
     }
 
     /**

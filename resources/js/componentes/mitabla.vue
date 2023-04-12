@@ -1,8 +1,8 @@
 <template>
-    <table>
+    <table class="text-center">
         <h2 v-html="mensaje"></h2>
 
-        <caption>
+        <caption class="titulo">
             {{
                 tabla
             }}
@@ -13,6 +13,7 @@
                     @keyup="filtrar(campo, valor[indice])"
                     type="text"
                     v-model="valor[indice]"
+                    :size="campo.length"
                 />
             </td>
         </tr>
@@ -32,10 +33,10 @@
 
             <td><button @click="borrar(fila.id)">Borrar</button></td>
 
-            <td><button>Mostrar</button></td>
+            <td><button @click="mostrar(fila.id)">Mostrar</button></td>
         </tr>
     </table>
-    <tailwind-pagination :data="filas" @pagination-change-pages="getResults" />
+    <tailwind-pagination :data="filas" @pagination-change-page="getResults" />
 </template>
 
 <script>
@@ -53,7 +54,7 @@ export default {
             campos: Array,
             ascendente: true,
             valor: Array,
-            filas_originales: Array,
+            // filas_originales: Array,
             // len_campo: Array,
             mensaje: String,
         };
@@ -61,7 +62,7 @@ export default {
     created() {
         this.filas = JSON.parse(this.filas_serializadas);
         this.campos = JSON.parse(this.campos_serializados);
-        this.filas_originales = this.filas;
+        // this.filas_originales = this.filas;
         this.mensaje = "";
         // this.campos.array.forEach((campo, index) => {
         //     this.len_campo[index] = campo.lenght;
@@ -69,7 +70,7 @@ export default {
     },
     methods: {
         ordenar: function (campo) {
-            this.filas = this.filas.sort((a, b) => {
+            this.filas.data = this.filas.data.sort((a, b) => {
                 let retorno;
                 if (a[campo] > b[campo]) retorno = this.ascendente ? 1 : -1;
                 else retorno = this.ascendente ? -1 : 1;
@@ -78,9 +79,9 @@ export default {
             this.ascendente = !this.ascendente;
         },
         filtrar: function (campo, valor) {
-            // this.filas = JSON.parse(this.filas_serializadas);
-            this.filas = this.filas_originales;
-            this.filas = this.filas.filter((fila) => {
+            this.filas = JSON.parse(this.filas_serializadas);
+            //this.filas = this.filas_originales;  En paginacion no funciona.
+            this.filas.data = this.filas.data.filter((fila) => {
                 let texto = new String(fila[campo]);
                 if (texto.indexOf(valor) > -1) return fila;
             });
@@ -90,9 +91,14 @@ export default {
             url = url + "/" + id + "/edit";
             window.location.href = url;
         },
-        getResults(page = 1) {
+        mostrar: function (id) {
             let url = window.location.href;
+            url = url + "/" + id;
+            window.location.href = url;
+        },
+        getResults(page = 1) {
             let self = this;
+            let url = window.location.href;
             axios
                 .get(url + "/paginate?page=" + page)
                 .then(function (response) {
@@ -100,7 +106,7 @@ export default {
                     console.log("Respuesta " + response.data);
                 })
                 .catch(function (error) {
-                    console.error("ERROR" + error);
+                    console.log("ERROR" + error);
                 });
         },
         borrar: function (id) {
@@ -134,4 +140,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.titulo {
+    @apply text-amber-500 text-6xl;
+}
+</style>

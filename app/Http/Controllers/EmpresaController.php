@@ -67,7 +67,7 @@ class EmpresaController extends Controller
     public function show(Empresa $empresa)
     {
         //
-        return view("empresas.edit",['empresa'=>$empresa]);
+        return view("empresas.mostrar_empresa",['empresa'=>$empresa]);
     }
 
     /**

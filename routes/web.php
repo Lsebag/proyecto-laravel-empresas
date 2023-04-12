@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\EmpresaController;
 use \App\Http\Controllers\ProductoController;
 use \App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\IdiomaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,13 +36,17 @@ require __DIR__.'/auth.php';
 
 Route::view('main','main');
 
+Route::get("idiomas/paginate",[IdiomaController::class,"get_paginate"]);
+
+Route::get("empresas/paginate",[EmpresaController::class,"get_paginate"]);
+
 Route::resource("empresas",EmpresaController::class);
 // Aquí mismo estoy definiendo cuál es el nombre de mi recurso
 Route::resource("products",ProductoController::class);
 
 Route::resource("alumnos",AlumnoController::class);
 
-Route::get("empresas/paginate",[EmpresaController::class,"get_paginate"]);
+Route::resource("idiomas",IdiomaController::class);
 
 Route::view('aprendiendo_vue','aprendiendo_vue');
 
